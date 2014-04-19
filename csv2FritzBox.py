@@ -9,6 +9,7 @@ convert your Contacts to FritzBox-Phonebook xml
 
 from csv import DictReader
 import xml.etree.ElementTree as et
+import time
 
 
 filename_in  = "/home/christoph/Downloads/contacts.csv"
@@ -22,10 +23,12 @@ trans_number = {"Home Phone": "home",
                 }
 
 
+
 with open(filename_in, "rb") as f:
     reader = DictReader(f)
     phonebooks = et.Element("phonebooks")
     phonebook = et.SubElement(phonebooks, tag="phonebook")
+    contact_count = 1
     for cr in reader:
         contact = et.SubElement(phonebook, "contact")
         
@@ -34,7 +37,7 @@ with open(filename_in, "rb") as f:
         
         person = et.SubElement(contact, "person")
         realName = et.SubElement(person, "realName")
-        realName.text = "%s %s" % (cr["First Name"], cr["Last Name"])
+        realName.text = "%s %s" % (cr["Last Name"], cr["First Name"])
         
         telephony = et.SubElement(contact, "telephony")
         number_counter = 0
@@ -55,7 +58,17 @@ with open(filename_in, "rb") as f:
         service = et.SubElement(contact, "services", {"nid": "1"})
         mail = et.SubElement(service, "email", {"classifier": "private", "id": "0"})
         mail.text = cr["E-mail Address"]
-    et.dump(phonebooks)
         
+        et.SubElement(contact, "setup")
         
+        mod_time = et.SubElement(contact, "mod_time")
+        mod_time.text = str(int(time.time()))
+        
+        uid = et.SubElement(contact, "uniqueid")
+        uid.text = str(contact_count)
+        contact_count += 1
+    elemTree = et.ElementTree(element=phonebooks)
     
+    print "[parsed %i contacts]" % contact_count
+    print "[writing to '%s']" % filename_out
+    elemTree.write(filename_out)
