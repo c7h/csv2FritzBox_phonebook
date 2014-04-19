@@ -10,7 +10,7 @@ from csv import DictReader
 import xml.etree.ElementTree as et
 import time
 
-
+from os.path import expanduser
 ## optionsparser
 from optparse import OptionParser
 op = OptionParser(usage="convert your Contacts to FritzBox-Phonebook xml")
@@ -19,8 +19,8 @@ op.add_option("-o", dest="filename_out", help="output file (xml)")
 (options, args) = op.parse_args()
 
 if options.filename_in and options.filename_out:
-    filename_in = options.filename_in
-    filename_out = options.filename_out
+    filename_in = expanduser(options.filename_in)
+    filename_out = expanduser(options.filename_out)
 else:
     op.error("i need input AND output (-h is for help)")
 
