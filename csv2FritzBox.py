@@ -1,7 +1,6 @@
 '''
 Created on 19.04.2014
 
-convert your Contacts to FritzBox-Phonebook xml
 
 
 @author: Christoph Gerneth
@@ -12,8 +11,19 @@ import xml.etree.ElementTree as et
 import time
 
 
-filename_in  = "/home/christoph/Downloads/contacts.csv"
-filename_out = "/home/christoph/contacts_test.xml"
+## optionsparser
+from optparse import OptionParser
+op = OptionParser(usage="convert your Contacts to FritzBox-Phonebook xml")
+op.add_option("-i", dest="filename_in", help="input file (Outlook CSV format)")
+op.add_option("-o", dest="filename_out", help="output file (*.xml)")
+(options, args) = op.parse_args()
+
+if options.filename_in and options.filename_out:
+    filename_in = options.filename_in
+    filename_out = options.filename_out
+else:
+    op.error("i need input AND output")
+
 
 
 trans_number = {"Home Phone": "home",
