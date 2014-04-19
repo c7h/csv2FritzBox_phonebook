@@ -15,14 +15,14 @@ import time
 from optparse import OptionParser
 op = OptionParser(usage="convert your Contacts to FritzBox-Phonebook xml")
 op.add_option("-i", dest="filename_in", help="input file (Outlook CSV format)")
-op.add_option("-o", dest="filename_out", help="output file (*.xml)")
+op.add_option("-o", dest="filename_out", help="output file (xml)")
 (options, args) = op.parse_args()
 
 if options.filename_in and options.filename_out:
     filename_in = options.filename_in
     filename_out = options.filename_out
 else:
-    op.error("i need input AND output")
+    op.error("i need input AND output (-h is for help)")
 
 
 
